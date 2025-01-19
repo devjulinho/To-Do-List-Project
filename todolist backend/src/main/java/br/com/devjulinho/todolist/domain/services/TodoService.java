@@ -25,6 +25,13 @@ public class TodoService {
         return new TodoDTO(repository.save(new Todo(todo)));
     }
 
+    public List<TodoDTO> listAllTasks(){
+        return repository.findAll()
+                .stream()
+                .map(TodoDTO::new)
+                .collect(Collectors.toList());
+    }
+
     public List<TodoDTO> listAllTasksByUser(long userId){
         return repository.findByUser(new User(userId))
                 .stream()
@@ -48,5 +55,23 @@ public class TodoService {
             return new TodoDTO(repository.save(insert));
         }
         else throw new Exception("Objeto não encontrado com id:" + dto.getId());
+    }
+
+    public TodoDTO concludeTask(long todoId) throws Exception {
+        Todo todo = repository.findById(todoId);
+        if (todo != null){
+            todo.setStatus(Status.valueOf("DONE"));
+            return new TodoDTO(repository.save(todo));
+        }
+        else throw new Exception("A tarefa informada não foi encontrada.");
+    }
+
+    public TodoDTO deleteById(long todoId) throws Exception {
+        Todo todo = repository.findById(todoId);
+        if (todo != null){
+            repository.deleteById(todoId);
+            return new TodoDTO(todo);
+        }
+        else throw new Exception("A tarefa informada não foi encontrada.");
     }
 }

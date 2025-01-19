@@ -7,6 +7,7 @@ import br.com.devjulinho.todolist.domain.entities.Status;
 import br.com.devjulinho.todolist.domain.entities.Todo;
 import br.com.devjulinho.todolist.domain.services.TodoService;
 import br.com.devjulinho.todolist.repository.TodoRepository;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,20 +23,20 @@ public class TodoController {
         this.service = service;
     }
 
-    public TodoController(){}
+    //public TodoController(){}
 
     @GetMapping
-    public ResponseEntity<?> listTasks(){
-        return null;
+    public ResponseEntity<List<TodoDTO>> listTasks(){
+        return new ResponseEntity<List<TodoDTO>>(service.listAllTasks(), HttpStatus.OK);
     }
 
-    @GetMapping("/{userID}")
-    public ResponseEntity<List<TodoDTO>> listTasksByUser(@PathVariable long userId){
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<TodoDTO>> listTasksByUser(@PathVariable("userId") long userId){
         return new ResponseEntity<List<TodoDTO>>(service.listAllTasksByUser(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userID}/{status}")
-    public ResponseEntity<List<TodoDTO>> listTasksByUserAndStatus(@PathVariable long userId, @PathVariable Status status){
+    @GetMapping("/{userId}/{status}")
+    public ResponseEntity<List<TodoDTO>> listTasksByUserAndStatus(@PathVariable("userId") long userId, @PathVariable("status")  Status status){
         return new ResponseEntity<List<TodoDTO>>(service.listTasksByUserAndStatus(userId, status), HttpStatus.OK);
     }
 
@@ -50,12 +51,12 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<?> removeTask(@PathVariable long todoId){
-        return null;
+    public ResponseEntity<TodoDTO> removeTask(@PathVariable long todoId) throws Exception {
+        return new ResponseEntity<TodoDTO>(service.deleteById(todoId), HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping
-    public ResponseEntity<?> conclude(){
-        return null;
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<TodoDTO> conclude(@PathVariable long todoId) throws Exception {
+        return new ResponseEntity<TodoDTO>(service.concludeTask(todoId), HttpStatus.OK);
     }
 }

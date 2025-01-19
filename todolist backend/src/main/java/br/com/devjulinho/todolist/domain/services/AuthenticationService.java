@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class AuthenticationService {
     public static final long EXPIRATIONTIME = 1000*60*15;
-    public static final String SIGNINKEY = "O segredo precisa ser longo";
+    public static final String SIGNINKEY = "O segredo precisa ser longo, pois precisa ser seguro o suficiente";
     public static final String PREFIX = "Bearer";
     private static final SecretKey SECRETKEY = Keys.hmacShaKeyFor(SIGNINKEY.getBytes());
 
